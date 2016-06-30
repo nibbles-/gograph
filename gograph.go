@@ -19,6 +19,5 @@ import "fmt"
 
 // func main
 func main() {
-	fmt.Printf("Heelloooo")
-}
+	fmt.Printf("Heelloooo")}
 
