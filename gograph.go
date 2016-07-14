@@ -78,10 +78,10 @@ func main() {
 	log.Printf("dBytes: %v", dBytes)
 	dBytes = dbFileReadCreate("database.json")
 	log.Printf("dBytes: %v", dBytes)
-	//dbBytes, err := ioutil.ReadFile("database.json")
 	var mapStore = map[string]map[string]int{}
 	err = json.Unmarshal(dBytes, &mapStore)
 	check(err)
+
 	// get data from cucm
 	client := &http.Client{}
 	var result = map[string]int{} // Init empty resultmap to contain the totals of all counters
@@ -90,7 +90,7 @@ func main() {
 		for _, server := range settings.Servers {
 			perfmonresult := soapResponse{}
 			url := fmt.Sprintf("http://%v/perfmonservice/services/PerfmonPort", server)
-			request, err := http.NewRequest("POST", url, bytes.NewBuffer(soaprequest))
+			request, _ := http.NewRequest("POST", url, bytes.NewBuffer(soaprequest))
 			request.Header.Set("SOAPAction", "perfmonCollectCounterData")
 			response, err := client.Do(request)
 			check(err)
@@ -101,7 +101,7 @@ func main() {
 			// Add current request results to the resultmap
 			for _, item := range perfmonresult.Soap.PerfmonCollectCounterData.Item {
 				device := strings.Split(item.Name, "\\")
-				result[device[3]] = result[device[3]] + item.Value // device[4] because thats where "Counter(Device)" ends up
+				result[device[3]] = result[device[3]] + item.Value // device[3] because thats where "Counter(Device)" ends up
 			}
 		}
 	}
@@ -111,7 +111,7 @@ func main() {
 	// encode into json and write to database.json
 	dBytes, err = json.Marshal(mapStore)
 	check(err)
-	ioutil.WriteFile("database.json", dBytes, 0666)
+	ioutil.WriteFile("database.json", dBytes, 0600)
 	check(err)
 	// read html template
 	// put data in html files
