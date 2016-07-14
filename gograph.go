@@ -75,9 +75,7 @@ func main() {
 	var err error // Error container
 	var dBytes []byte
 
-	log.Printf("dBytes: %v", dBytes)
 	dBytes = dbFileReadCreate("database.json")
-	log.Printf("dBytes: %v", dBytes)
 	var mapStore = map[string]map[string]int{}
 	err = json.Unmarshal(dBytes, &mapStore)
 	check(err)
@@ -106,7 +104,9 @@ func main() {
 		}
 	}
 	// save result to the database map
-	mapStore[fmt.Sprintf("%v", time.Now().Unix())] = result
+	for key, value := range result {
+		mapStore[key] = map[string]int{fmt.Sprintf("%v", time.Now().Unix()): value}
+	}
 
 	// encode into json and write to database.json
 	dBytes, err = json.Marshal(mapStore)
