@@ -41,6 +41,11 @@ type item struct {
 	CStatus string
 }
 
+type tick struct {
+	Timestamp string
+	Value     int
+}
+
 func check(e error) {
 	if e != nil {
 		panic(e)
@@ -76,7 +81,7 @@ func main() {
 	var dBytes []byte
 
 	dBytes = dbFileReadCreate("database.json")
-	var mapStore = map[string]map[string]int{}
+	var mapStore = map[string][]tick{}
 	err = json.Unmarshal(dBytes, &mapStore)
 	check(err)
 
@@ -105,7 +110,8 @@ func main() {
 	}
 	// save result to the database map
 	for key, value := range result {
-		mapStore[key] = map[string]int{fmt.Sprintf("%v", time.Now().Unix()): value}
+		ticker := tick{time.Now().Local().String(), value}
+		mapStore[key] = append(mapStore[key], ticker)
 	}
 
 	// encode into json and write to database.json
