@@ -110,7 +110,7 @@ func main() {
 	}
 	// save result to the database map
 	for key, value := range result {
-		ticker := tick{time.Now().Local().String(), value}
+		ticker := tick{string(time.Now().Unix()), value}
 		mapStore[key] = append(mapStore[key], ticker)
 	}
 
