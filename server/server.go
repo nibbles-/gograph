@@ -32,7 +32,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
           <CStatus xsi:type="xsd:unsignedInt">1</CStatus>
         </item>
         <item xsi:type="ns1:CounterInfoType">
-          <Name xsi:type="ns1:CounterNameType">\\%[1]v\%[4]v(%[5]v_Trunk_2)\PRIChannelsActive</Name>
+          <Name xsi:type="ns1:CounterNameType">\\%[1]v\%[4]v(%[5]v_Trunk_1)\PRIChannelsActive</Name>
           <Value xsi:type="xsd:long">%[2]v</Value>
           <CStatus xsi:type="xsd:unsignedInt">1</CStatus>
         </item>
@@ -42,7 +42,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
           <CStatus xsi:type="xsd:unsignedInt">1</CStatus>
         </item>
         <item xsi:type="ns1:CounterInfoType">
-          <Name xsi:type="ns1:CounterNameType">\\%[1]v\%[4]v(%[5]v_Trunk_2)\CallsActive</Name>
+          <Name xsi:type="ns1:CounterNameType">\\%[1]v\%[4]v(%[5]v_Trunk_1)\CallsActive</Name>
           <Value xsi:type="xsd:long">%[2]v</Value>
           <CStatus xsi:type="xsd:unsignedInt">1</CStatus>
         </item>
