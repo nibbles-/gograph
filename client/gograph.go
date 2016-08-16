@@ -7,66 +7,10 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
-	"os"
 	"strings"
 	"time"
 )
-
-type configuration struct {
-	Username string
-	Password string
-	Servers  []string
-	Counters []string
-}
-type soapResponse struct {
-	// Envelope part of the soap response
-	XMLName xml.Name `xml:"Envelope"`
-	Soap    *soapBody
-}
-type soapBody struct {
-	XMLName                   xml.Name `xml:"Body"`
-	PerfmonCollectCounterData *perfmonCollectCounterDataResponse
-}
-type perfmonCollectCounterDataResponse struct {
-	XMLName xml.Name `xml:"perfmonCollectCounterDataResponse"`
-	Item    []item   `xml:"ArrayOfCounterInfo>item"`
-}
-
-type item struct {
-	XMLName xml.Name `xml:"item"`
-	Name    string
-	Value   int
-	CStatus string
-}
-
-type tick struct {
-	Timestamp string
-	Value     int
-}
-
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
-func dbFileReadCreate(file string) []byte {
-	// Read dbFile and Create if not existing
-	data, e := ioutil.ReadFile(file)
-	if e != nil && os.IsNotExist(e) {
-		log.Print("Database not found. Creating a new one")
-		ioutil.WriteFile("database.json", []byte("{}"), 0600)
-		data, e = ioutil.ReadFile(file)
-		if e != nil {
-			panic(e)
-		}
-	} else if e != nil {
-		panic(e)
-	}
-	return data
-}
 
 func main() {
 	// read settings
@@ -110,7 +54,7 @@ func main() {
 	}
 	// save result to the database map
 	for key, value := range result {
-		ticker := tick{string(time.Now().Unix()), value}
+		ticker := tick{fmt.Sprint(time.Now().Unix()), value}
 		mapStore[key] = append(mapStore[key], ticker)
 	}
 
