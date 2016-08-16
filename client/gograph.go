@@ -48,6 +48,7 @@ func main() {
 			// Add current request results to the resultmap
 			for _, item := range perfmonresult.Soap.PerfmonCollectCounterData.Item {
 				device := strings.Split(item.Name, "\\")
+				fmt.Println(device)
 				result[device[3]] = result[device[3]] + item.Value // device[3] because thats where "Counter(Device)" ends up
 			}
 		}

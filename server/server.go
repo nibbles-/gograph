@@ -31,6 +31,26 @@ func handler(w http.ResponseWriter, r *http.Request) {
           <Value xsi:type="xsd:long">%[3]v</Value>
           <CStatus xsi:type="xsd:unsignedInt">1</CStatus>
         </item>
+        <item xsi:type="ns1:CounterInfoType">
+          <Name xsi:type="ns1:CounterNameType">\\%[1]v\%[4]v(%[5]v_Trunk_2)\PRIChannelsActive</Name>
+          <Value xsi:type="xsd:long">%[2]v</Value>
+          <CStatus xsi:type="xsd:unsignedInt">1</CStatus>
+        </item>
+        <item xsi:type="ns1:CounterInfoType">
+          <Name xsi:type="ns1:CounterNameType">\\%[1]v\%[4]v(%[5]v_Trunk_2)\PRIChannelsActive</Name>
+          <Value xsi:type="xsd:long">%[3]v</Value>
+          <CStatus xsi:type="xsd:unsignedInt">1</CStatus>
+        </item>
+        <item xsi:type="ns1:CounterInfoType">
+          <Name xsi:type="ns1:CounterNameType">\\%[1]v\%[4]v(%[5]v_Trunk_2)\CallsActive</Name>
+          <Value xsi:type="xsd:long">%[2]v</Value>
+          <CStatus xsi:type="xsd:unsignedInt">1</CStatus>
+        </item>
+        <item xsi:type="ns1:CounterInfoType">
+          <Name xsi:type="ns1:CounterNameType">\\%[1]v\%[4]v(%[5]v_Trunk_2)\CallsActive</Name>
+          <Value xsi:type="xsd:long">%[3]v</Value>
+          <CStatus xsi:type="xsd:unsignedInt">1</CStatus>
+        </item>
       </ArrayOfCounterInfo>
       </ns1:perfmonCollectCounterDataResponse>
     </soapenv:Body>
