@@ -7,6 +7,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -47,6 +48,18 @@ func main() {
 			check(err)
 			// Add current request results to the resultmap
 			for _, item := range perfmonresult.Soap.PerfmonCollectCounterData.Item {
+				// Create a regexp to be able to generate unique devicenames
+				switch counter {
+				// If we are looking at a SIP device we want to use CallsInProgress
+				case "Cisco SIP":
+					// If we are looking at a MGCP GW we want to use PRIChannelsActive
+				case "Cisco MGCP Gateways":
+					// If we are looking at a MGCP PRI we want to use CallsActive
+				case "Cisco MGCP PRI Device":
+				default:
+					log.Panic("Unsupported Counter: ", counter)
+				}
+
 				device := strings.Split(item.Name, "\\")
 				fmt.Println(device)
 				result[device[3]] = result[device[3]] + item.Value // device[3] because thats where "Counter(Device)" ends up
