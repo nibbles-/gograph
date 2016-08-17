@@ -17,7 +17,7 @@ func main() {
 	settings := configuration{}
 	settings.Username = "administrator"
 	settings.Password = "password"
-	settings.Servers = append(settings.Servers, "127.0.0.1:8080", "127.0.0.2:8080")
+	settings.Servers = append(settings.Servers, "127.0.0.1:8080", "192.168.1.100", "127.0.0.2:8080", "192.168.1.110")
 	settings.Counters = append(settings.Counters, "Cisco SIP", "Cisco MGCP Gateways", "Cisco MGCP PRI Device")
 
 	// load database into to a map
@@ -29,9 +29,11 @@ func main() {
 	err = json.Unmarshal(dBytes, &mapStore)
 	check(err)
 
-	// get data from cucm
-	client := &http.Client{}
-	var result = map[string]int{} // Init empty resultmap to contain the totals of all counters
+	// Create a client with a 10 second timeout
+	client := &http.Client{Timeout: time.Second * 10}
+	// Init empty resultmap to contain the totals of all counters
+	var result = map[string]int{}
+	// Get data from cucm
 	for _, counter := range settings.Counters {
 		soaprequest := []byte(fmt.Sprintf("%v", counter))
 		for _, server := range settings.Servers {
@@ -39,8 +41,13 @@ func main() {
 			url := fmt.Sprintf("http://%v/perfmonservice/services/PerfmonPort", server)
 			request, _ := http.NewRequest("POST", url, bytes.NewBuffer(soaprequest))
 			request.Header.Set("SOAPAction", "perfmonCollectCounterData")
+			fmt.Println(server)
 			response, err := client.Do(request)
-			check(err)
+			if err != nil {
+				// If client.Do generates an error log it and move on.
+				log.Println(err)
+				continue
+			}
 			defer response.Body.Close()
 			responseBody, _ := ioutil.ReadAll(response.Body)
 			err = xml.Unmarshal(responseBody, &perfmonresult)
@@ -66,11 +73,10 @@ func main() {
 					device := devicestring[1]
 					result[device] = result[device] + item.Value // add current device and value to result
 				}
-
 			}
-			fmt.Println(result)
 		}
 	}
+	fmt.Println(result)
 	// save result to the database map
 	for key, value := range result {
 		ticker := tick{fmt.Sprint(time.Now().Unix()), value}

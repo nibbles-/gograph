@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -9,6 +10,7 @@ import (
 // Used to handle errors in a nice way
 func check(e error) {
 	if e != nil {
+		fmt.Println("Bob's your uncle")
 		panic(e)
 	}
 }
