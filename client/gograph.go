@@ -69,6 +69,7 @@ func main() {
 				default:
 					log.Panic("Unsupported Counter: ", counter)
 				}
+				// We only save matched values (i.e devicestring is not empty)
 				if len(devicestring) > 0 {
 					device := devicestring[1]
 					result[device] = result[device] + item.Value // add current device and value to result
