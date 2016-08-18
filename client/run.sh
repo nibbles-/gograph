@@ -4,8 +4,8 @@ while true
 do
 	echo "Start"
 	go run *.go
-	ls -lh database.json
+	ls -lh database.*
 	echo "Loop"
-	sleep 5
+	sleep 1
 done
 
