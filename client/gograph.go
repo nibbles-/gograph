@@ -10,6 +10,8 @@ import (
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/boltdb/bolt"
 )
 
 func main() {
@@ -17,7 +19,8 @@ func main() {
 	settings := configuration{}
 	settings.Username = "administrator"
 	settings.Password = "password"
-	settings.Servers = append(settings.Servers, "127.0.0.1:8080", "192.168.1.100", "127.0.0.2:8080", "192.168.1.110")
+	//settings.Servers = append(settings.Servers, "127.0.0.1:8080", "192.168.1.100", "127.0.0.2:8080", "192.168.1.110")
+	settings.Servers = append(settings.Servers, "127.0.0.1:8080", "127.0.0.2:8080")
 	settings.Counters = append(settings.Counters, "Cisco SIP", "Cisco MGCP Gateways", "Cisco MGCP PRI Device")
 
 	// load database into to a map
@@ -78,6 +81,26 @@ func main() {
 		}
 	}
 	fmt.Println(result)
+	// Open the DB. Will be created if it doesn't exist
+	db, err := bolt.Open("database.bolt", 0600, nil)
+	check(err)
+	defer db.Close()
+
+	// Update the database with the result.
+	for key, value := range result {
+		err := db.Update(func(tx *bolt.Tx) error {
+			// A db Bucket is created for each key and the tick is store there.
+			b, err := tx.CreateBucketIfNotExists([]byte(key))
+			check(err)
+			// The value is put in the bucket with Now() as key.
+			err = b.Put([]byte(fmt.Sprint(time.Now().Unix())), []byte(string(value)))
+			check(err)
+			return err
+		})
+		check(err)
+	}
+	fmt.Println(db.Info())
+	check(err)
 	// save result to the database map
 	for key, value := range result {
 		ticker := tick{fmt.Sprint(time.Now().Unix()), value}
