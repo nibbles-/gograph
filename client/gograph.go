@@ -89,6 +89,7 @@ func main() {
 	check(err)
 	ioutil.WriteFile("database.json", dBytes, 0600)
 	check(err)
+
 	// read html template
 	// put data in html files
 	//fmt.Println(settings.Username, settings.Password, settings.Servers, settings.Counters)
