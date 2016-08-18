@@ -80,7 +80,7 @@ func main() {
 			}
 		}
 	}
-	fmt.Println(result)
+	//fmt.Println(result)
 	// Open the DB. Will be created if it doesn't exist
 	db, err := bolt.Open("database.bolt", 0600, nil)
 	check(err)
@@ -99,7 +99,7 @@ func main() {
 		})
 		check(err)
 	}
-	fmt.Println(db.Info())
+	//fmt.Println(db.Info())
 	check(err)
 	// save result to the database map
 	for key, value := range result {
