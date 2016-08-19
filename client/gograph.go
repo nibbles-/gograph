@@ -91,6 +91,7 @@ func main() {
 	db.Info()
 	for i := 1; i <= 10; i++ {
 		var ticker = tick{Timestamp: time.Now().Unix(), Value: i}
+		time.Sleep(10 * time.Second)
 		db.Append(ticker)
 	}
 	fmt.Println(db.ticks)
