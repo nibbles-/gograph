@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
+	"gograph/client/libdb"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -84,14 +85,15 @@ func main() {
 		mapStore[key] = append(mapStore[key], ticker)
 
 	}
-	db := Database{}
-	db.Name = "Kalle"
-	db.Intervall = 1
-	db.Rows = 5
+	db := libdb.Database{}
+	db.SetName("Baskerbosse")
+	db.SetInterval(1)
+	db.SetRows(5)
 	db.Info()
 	for i := 1; i <= 10; i++ {
-		var ticker = tick{Timestamp: time.Now().Unix(), Value: i}
+		var ticker = libdb.Tick{Timestamp: time.Now().Unix(), Value: i}
 		db.Append(ticker)
+		fmt.Println(db)
 		time.Sleep(2 * time.Second)
 	}
 	fmt.Println(db)
