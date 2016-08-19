@@ -25,7 +25,7 @@ func main() {
 	var err error // Error container
 	var dBytes []byte
 
-	dBytes = dbFileReadCreate("database.json")
+	dBytes = dbFileReadCreate("stats.json")
 	var mapStore = map[string][]tick{}
 	err = json.Unmarshal(dBytes, &mapStore)
 	check(err)
@@ -80,14 +80,25 @@ func main() {
 	//fmt.Println(result)
 	// save result to the database map
 	for key, value := range result {
-		ticker := tick{fmt.Sprint(time.Now().Unix()), value}
+		ticker := tick{time.Now().Unix(), value}
 		mapStore[key] = append(mapStore[key], ticker)
+
 	}
+	db := Database{}
+	db.Name = "Kalle"
+	db.Intervall = 1
+	db.Rows = 5
+	db.Info()
+	for i := 1; i <= 10; i++ {
+		var ticker = tick{Timestamp: time.Now().Unix(), Value: i}
+		db.Append(ticker)
+	}
+	fmt.Println(db.ticks)
 
 	// encode into json and write to database.json
 	dBytes, err = json.Marshal(mapStore)
 	check(err)
-	ioutil.WriteFile("database.json", dBytes, 0600)
+	ioutil.WriteFile("stats.json", dBytes, 0600)
 	check(err)
 
 	// read html template

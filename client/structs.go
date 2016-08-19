@@ -1,8 +1,6 @@
 package main
 
-import (
-	"encoding/xml"
-)
+import "encoding/xml"
 
 // For settings in the program
 type configuration struct {
@@ -38,6 +36,6 @@ type item struct {
 
 // tick is an entry in the database
 type tick struct {
-	Timestamp string
+	Timestamp int64
 	Value     int
 }
