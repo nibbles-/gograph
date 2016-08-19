@@ -91,10 +91,13 @@ func main() {
 	db.Info()
 	for i := 1; i <= 10; i++ {
 		var ticker = tick{Timestamp: time.Now().Unix(), Value: i}
-		time.Sleep(10 * time.Second)
 		db.Append(ticker)
+		time.Sleep(2 * time.Second)
 	}
-	fmt.Println(db.ticks)
+	fmt.Println(db)
+	dBytes, err = json.Marshal(db)
+	check(err)
+	ioutil.WriteFile("db.json", dBytes, 0600)
 
 	// encode into json and write to database.json
 	dBytes, err = json.Marshal(mapStore)
