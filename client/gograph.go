@@ -97,14 +97,12 @@ func main() {
 		time.Sleep(2 * time.Second)
 	}
 	fmt.Println(db)
-	dBytes, err = json.Marshal(db)
-	check(err)
-	ioutil.WriteFile("db.json", dBytes, 0600)
+	db.Save()
 
 	// encode into json and write to database.json
 	dBytes, err = json.Marshal(mapStore)
 	check(err)
-	ioutil.WriteFile("stats.json", dBytes, 0600)
+	err = ioutil.WriteFile("stats.json", dBytes, 0600)
 	check(err)
 
 	// read html template

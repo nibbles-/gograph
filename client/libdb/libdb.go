@@ -1,7 +1,9 @@
 package libdb
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 )
 
@@ -93,4 +95,16 @@ func (db *Database) GetAverage() int {
 	}
 	average = average / len(db.ticks)
 	return average
+}
+
+// Save writes the db as json to the file specified db.file
+func (db *Database) Save() {
+	dBytes, err := json.Marshal(db)
+	if err != nil {
+		log.Printf("%v is not valid json. Something is really broken", db)
+	}
+	ioutil.WriteFile("db.json", dBytes, 0600)
+	if err != nil {
+		log.Printf("Unable to save database to %v", db.file)
+	}
 }
