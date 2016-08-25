@@ -86,16 +86,18 @@ func main() {
 
 	}
 	db := libdb.Database{}
-	db.SetName("Baskerbosse")
-	db.SetInterval(1)
-	db.SetRows(5)
+	db.Name = "LeDatabase"
+	db.File = "LeFile.db"
+	tbl := db.NewTable("LeTable", 1, 5, nil)
 	db.Info()
+	var ticker = libdb.Tick{}
 	for i := 1; i <= 10; i++ {
-		var ticker = libdb.Tick{Timestamp: time.Now().Unix(), Value: i}
-		db.Append(ticker)
-		fmt.Println(db)
+		ticker.Timestamp = time.Now().Unix()
+		ticker.Value = i
+		tbl.Append(ticker)
 		time.Sleep(2 * time.Second)
 	}
+	fmt.Println(tbl)
 	fmt.Println(db)
 	db.Save()
 
