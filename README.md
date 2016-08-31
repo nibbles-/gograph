@@ -3,5 +3,5 @@ A small tool to read trafficdata from a CUCM and present it in nice graphs. Utte
 
 Required libraries:
 
-got get github.com/wcharczuk/go-chart<br>
+go get github.com/wcharczuk/go-chart<br>
 go get -tags purego github.com/cznic/ql
