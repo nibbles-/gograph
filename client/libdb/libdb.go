@@ -76,6 +76,6 @@ func (db *Database) Save() {
 	}
 	ioutil.WriteFile("db.json", dBytes, 0600)
 	if err != nil {
-		log.Printf("Unable to save database to %v", db.file)
+		log.Printf("Unable to save database to %v", db.File)
 	}
 }
