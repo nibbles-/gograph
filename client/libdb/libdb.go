@@ -25,7 +25,7 @@ type table struct {
 type Database struct {
 	Name   string
 	File   string
-	Tables []table
+	Tables []*table
 }
 
 // Info prints information about the DB
@@ -42,6 +42,9 @@ func (tbl *table) Append(ticker Tick) {
 			if len(tbl.Ticks) >= tbl.Rows {
 				tbl.Ticks = append(tbl.Ticks[:0], tbl.Ticks[1:]...)
 				tbl.Ticks = append(tbl.Ticks, ticker)
+				if tbl.Overflow != nil {
+					tbl.Overflow.Append(ticker)
+				}
 			} else {
 				tbl.Ticks = append(tbl.Ticks, ticker)
 			}
@@ -54,7 +57,7 @@ func (tbl *table) Append(ticker Tick) {
 // NewTable creates a new table in the Database
 func (db *Database) NewTable(name string, interval int, rows int, overflow *table) *table {
 	tbl := table{Name: name, Interval: interval, Rows: rows, Overflow: overflow}
-	db.Tables = append(db.Tables, tbl)
+	db.Tables = append(db.Tables, &tbl)
 	return &tbl
 }
 

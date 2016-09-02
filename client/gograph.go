@@ -3,7 +3,6 @@ package main
 // make needed imports
 import (
 	"bytes"
-	"encoding/json"
 	"encoding/xml"
 	"fmt"
 	"gograph/client/libdb"
@@ -22,14 +21,10 @@ func main() {
 	settings.Servers = append(settings.Servers, "127.0.0.1:8080", "127.0.0.2:8080")
 	settings.Counters = append(settings.Counters, "Cisco SIP", "Cisco MGCP Gateways", "Cisco MGCP PRI Device")
 
-	// load database into to a map
-	var err error // Error container
-	var dBytes []byte
-
-	dBytes = dbFileReadCreate("stats.json")
-	var mapStore = map[string][]tick{}
-	err = json.Unmarshal(dBytes, &mapStore)
-	check(err)
+	// LoadCreate a database
+	db := libdb.Database{}
+	db.Name = "LeDatabase"
+	db.File = "LeFile.db"
 
 	// Create a client with a 10 second timeout
 	client := &http.Client{Timeout: time.Second * 10}
@@ -79,33 +74,17 @@ func main() {
 		}
 	}
 	//fmt.Println(result)
-	// save result to the database map
-	for key, value := range result {
-		ticker := tick{time.Now().Unix(), value}
-		mapStore[key] = append(mapStore[key], ticker)
 
-	}
-	db := libdb.Database{}
-	db.Name = "LeDatabase"
-	db.File = "LeFile.db"
-	tbl := db.NewTable("LeTable", 1, 5, nil)
-	db.Info()
-	var ticker = libdb.Tick{}
-	for i := 1; i <= 10; i++ {
-		ticker.Timestamp = time.Now().Unix()
-		ticker.Value = i
+	// save result to the database
+	for key, value := range result {
+		ticker := libdb.Tick{Timestamp: time.Now().Unix(), Value: value}
+		tbl := db.NewTable(key, 1, 5, nil)
 		tbl.Append(ticker)
 		time.Sleep(2 * time.Second)
 	}
-	fmt.Println(tbl)
+
 	fmt.Println(db)
 	db.Save()
-
-	// encode into json and write to database.json
-	dBytes, err = json.Marshal(mapStore)
-	check(err)
-	err = ioutil.WriteFile("stats.json", dBytes, 0600)
-	check(err)
 
 	// read html template
 	// put data in html files
