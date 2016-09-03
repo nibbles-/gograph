@@ -78,7 +78,8 @@ func main() {
 	// save result to the database
 	for key, value := range result {
 		ticker := libdb.Tick{Timestamp: time.Now().Unix(), Value: value}
-		tbl := db.NewTable(key, 1, 5, nil)
+		weekTbl := db.NewTable(key+"_week", 10, 5, nil)
+		tbl := db.NewTable(key, 1, 10, weekTbl)
 		tbl.Append(ticker)
 		time.Sleep(2 * time.Second)
 	}

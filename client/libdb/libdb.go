@@ -43,6 +43,9 @@ func (tbl *table) Append(ticker Tick) {
 				tbl.Ticks = append(tbl.Ticks[:0], tbl.Ticks[1:]...)
 				tbl.Ticks = append(tbl.Ticks, ticker)
 				if tbl.Overflow != nil {
+					// Calculate average of the table and overflow it
+					tblAverage := tbl.GetAverage()
+					ticker.Value = tblAverage
 					tbl.Overflow.Append(ticker)
 				}
 			} else {
