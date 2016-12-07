@@ -24,7 +24,7 @@ func main() {
 	// LoadCreate a database
 	db := libdb.Database{}
 	db.Name = "LeDatabase"
-	db.File = "LeFile.db"
+	db.File = "LeFile.json"
 
 	// Create a client with a 10 second timeout
 	client := &http.Client{Timeout: time.Second * 10}
