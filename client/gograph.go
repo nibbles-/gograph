@@ -5,7 +5,6 @@ import (
 	"bytes"
 	"encoding/xml"
 	"fmt"
-	"gograph/client/libdb"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -22,7 +21,7 @@ func main() {
 	settings.Counters = append(settings.Counters, "Cisco SIP", "Cisco MGCP Gateways", "Cisco MGCP PRI Device")
 
 	// LoadCreate a database
-	db := libdb.Database{}
+	db := Database{}
 	db.Name = "LeDatabase"
 	db.File = "LeFile.json"
 

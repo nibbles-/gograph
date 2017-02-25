@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -27,4 +28,9 @@ func dbFileReadCreate(file string) []byte {
 		panic(e)
 	}
 	return data
+}
+
+// Info prints the database.
+func (db *Database) Info() {
+	fmt.Println(db)
 }

@@ -2,36 +2,11 @@ package libdb
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 )
 
-// Tick is a Tick is a tick is a tick
-type Tick struct {
-	Timestamp int64
-	Value     int
-}
-
-type table struct {
-	Name     string
-	Interval int
-	Rows     int
-	Overflow *table
-	Ticks    []Tick
-}
-
-// Database is a type for storing stats in
-type Database struct {
-	Name   string
-	File   string
-	Tables []*table
-}
-
 // Info prints information about the DB
-func (db *Database) Info() {
-	fmt.Println(db)
-}
 
 // Append an item to the DB according to intervall and row rules
 func (tbl *table) Append(ticker Tick) {
